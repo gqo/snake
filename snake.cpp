@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+#include <string>
+#include <iostream>
 
 int main()
 {
@@ -10,6 +12,15 @@ int main()
     background.setOutlineThickness(10);
     background.setOutlineColor(sf::Color::Red);
     background.setPosition(10,10);
+    // Initialize font for use in menu screen
+    sf::Font font;
+    if(!font.loadFromFile("Ubuntu-C.ttf")){ // Loads font and checks for error
+        std::cout << "Could not load font." << std::endl;
+    }
+    // Initialize menu screen text { UNDER CONSTRUCTION }
+    sf::String sentence = "menu";
+    sf::Text menuText(sentence,font,30);
+    menuText.setFillColor(sf::Color::Blue);
     // Creates game window instance
     while (window.isOpen())
     {
@@ -21,7 +32,8 @@ int main()
             if (event.type == sf::Event::Closed) { window.close(); }
         }
         window.clear();
-        window.draw(background);
+        //window.draw(background);
+        window.draw(menuText);
         window.display();
     }
     return 0;
