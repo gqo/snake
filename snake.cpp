@@ -2,6 +2,28 @@
 #include <string>
 #include <iostream>
 
+// (Hopefully) extensible function for character movement
+void movement(int direction, sf::RectangleShape& body) {
+    switch(direction) {
+        // Up
+        case 0:
+            body.move(0,-20);
+            break;
+        // Down
+        case 1:
+            body.move(0,20);
+            break;
+        // Left
+        case 2:
+            body.move(-20,0);
+            break;
+        // Right
+        case 3:
+            body.move(20,0);
+            break;
+    }
+}
+
 int main() {
     // Initialize popup window, i.e. the game window
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
@@ -47,6 +69,7 @@ int main() {
                 case sf::Event::KeyPressed:
                     switch(event.key.code) {
                         // At menu, close window; in game, return to menu
+                        // Does NOT reset body, acts as pause { UNDER CONSTRUCTION }
                         case sf::Keyboard::Escape:
                             if(inGame == 1) { inGame = 0; }
                             else{ window.close(); }
@@ -54,6 +77,20 @@ int main() {
                         // Starts game
                         case sf::Keyboard::Space:
                             inGame = 1;
+                            break;
+                        // Character movement handling
+                        case sf::Keyboard::Up:
+                            movement(0,body);
+                            break;
+                        case sf::Keyboard::Down:
+                            movement(1,body);
+                            break;
+                        case sf::Keyboard::Left:
+                            movement(2,body);
+                            break;
+                        case sf::Keyboard::Right:
+                            movement(3,body);
+                            break;
                         // Default for unhandled keypress
                         default:
                             break;
