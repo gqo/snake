@@ -2,7 +2,10 @@
 #include <string>
 #include <iostream>
 
+
+
 int main() {
+    bool inGame = 0; //are you in game?
     // Initialize popup window, i.e. the game window
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
     // Initialize background shape and look
@@ -28,6 +31,8 @@ int main() {
     startText.setFillColor(sf::Color::White);
     startText.setStyle(sf::Text::Bold);
     startText.setPosition(32,300);
+    sf::RectangleShape body(sf::Vector2f(20, 20)); //Snake body
+    body.setPosition(240,240);
     // Creates game window instance
     while (window.isOpen()) {
         // Tracks interactions with window
@@ -43,8 +48,12 @@ int main() {
                     switch(event.key.code) {
                         // Close window if escape is pressed
                         case sf::Keyboard::Escape:
-                            window.close();
+                            if(inGame ==1){ inGame = 0; }
+                            else{ window.close(); }
                             break;
+                        // Starts game
+                        case sf::Keyboard::Space:
+                            inGame = 1;
                         // Default for unhandled keypress
                         default:
                             break;
@@ -56,10 +65,16 @@ int main() {
             }
         }
         window.clear();
-        window.draw(background);
-        window.draw(titleText);
-        window.draw(subText);
-        window.draw(startText);
+        
+        if(inGame == 0) {
+            window.draw(background);
+            window.draw(titleText);
+            window.draw(subText);
+            window.draw(startText);
+        }
+        else {
+            window.draw(body);   
+        }
         window.display();
     }
     return 0;
