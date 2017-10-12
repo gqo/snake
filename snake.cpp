@@ -24,17 +24,36 @@ int main() {
     sf::Text subText("a game by Graeme & Reece",font,20); // Subtitle
     subText.setFillColor(sf::Color::Blue);
     subText.setPosition(147,200);
-    sf::Text startText("Press TBD to Begin",font,60); // Start instruction { TBD }
+    sf::Text startText("Press Space to Begin",font,55); // Start instruction { TBD }
     startText.setFillColor(sf::Color::White);
     startText.setStyle(sf::Text::Bold);
-    startText.setPosition(35,300);
+    startText.setPosition(32,300);
     // Creates game window instance
     while (window.isOpen()) {
         // Tracks interactions with window
         sf::Event event;
         while (window.pollEvent(event)) {
-            // Checks if window was closed and then closes window
-            if (event.type == sf::Event::Closed) { window.close(); }
+            switch (event.type) {
+                // Window closed
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                // Key pressed
+                case sf::Event::KeyPressed:
+                    switch(event.key.code) {
+                        // Close window if escape is pressed
+                        case sf::Keyboard::Escape:
+                            window.close();
+                            break;
+                        // Default for unhandled keypress
+                        default:
+                            break;
+                    }
+                    break;
+                // Default for unhandled event type
+                default:
+                    break;
+            }
         }
         window.clear();
         window.draw(background);
