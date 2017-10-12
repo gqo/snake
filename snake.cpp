@@ -31,13 +31,13 @@ void gameReset(sf::RectangleShape& body) {
 
 int main() {
     // Initialize popup window, i.e. the game window
-    sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
+    sf::RenderWindow window(sf::VideoMode(520, 520), "Snake");
     // Initialize background shape and look
     sf::RectangleShape background(sf::Vector2f(480,480));
     background.setFillColor(sf::Color::Black);
-    background.setOutlineThickness(10);
+    background.setOutlineThickness(20);
     background.setOutlineColor(sf::Color::Red);
-    background.setPosition(10,10);
+    background.setPosition(20,20);
     // Initialize font for use in menu screen
     sf::Font font;
     if(!font.loadFromFile("Ubuntu-C.ttf")) { // Loads font and checks for error
