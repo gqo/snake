@@ -24,6 +24,11 @@ void movement(int direction, sf::RectangleShape& body) {
     }
 }
 
+// (Hopefully) extensible function for reseting game on escape
+void gameReset(sf::RectangleShape& body) {
+    body.setPosition(240,240);
+}
+
 int main() {
     // Initialize popup window, i.e. the game window
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
@@ -69,10 +74,13 @@ int main() {
                 case sf::Event::KeyPressed:
                     switch(event.key.code) {
                         // At menu, close window; in game, return to menu
-                        // Does NOT reset body, acts as pause { UNDER CONSTRUCTION }
+                        // Resets game to start
                         case sf::Keyboard::Escape:
-                            if(inGame == 1) { inGame = 0; }
-                            else{ window.close(); }
+                            if(inGame == 1) { 
+                                inGame = 0;
+                                gameReset(body); 
+                            }
+                            else { window.close(); }
                             break;
                         // Starts game
                         case sf::Keyboard::Space:
@@ -102,9 +110,10 @@ int main() {
             }
         }
         window.clear();
+        // Draws background
+        window.draw(background);
         // Draws menu screen
         if(inGame == 0) {
-            window.draw(background);
             window.draw(titleText);
             window.draw(subText);
             window.draw(startText);
