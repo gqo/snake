@@ -54,12 +54,20 @@ void gameReset(sf::RectangleShape& section) {
 }
 
 // Function for adding a tail section to snake
+// If you change the position the tail sections spawn at the movement breaks (!)
 void addTailSection(std::vector<sf::RectangleShape>& snakeSections) {
     sf::RectangleShape tailSection(sf::Vector2f(20,20));
     snakeSections.push_back(tailSection);
 }
 
 // Function for handling all character movement
+/* 
+Moves the snake head and then updates the tail sections' positions to the
+positions that precede them. E.g. the tail section that follows the head will move
+to where the head used to be.
+
+Note: This shouldn't work as well as it does, most likely going to need to change it.
+*/
 void moveSnake(int direction, std::vector<sf::RectangleShape>& snakeSections) {
     sf::Vector2f leadPos = snakeSections[0].getPosition();
     sf::Vector2f trailPos;
@@ -109,7 +117,7 @@ int main() {
     // Initialize game screen objects
     sf::RectangleShape body(sf::Vector2f(20, 20)); // Character test body
     body.setPosition(240,240);
-    // Initialize vector for tracking snake sections
+    // Initialize vector for tracking snake sections and two tail sections
     std::vector<sf::RectangleShape> snakeSections;
     snakeSections.push_back(body);
     addTailSection(snakeSections);
