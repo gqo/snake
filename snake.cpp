@@ -57,6 +57,7 @@ void gameReset(sf::RectangleShape& section) {
 // If you change the position the tail sections spawn at the movement breaks (!)
 void addTailSection(std::vector<sf::RectangleShape>& snakeSections) {
     sf::RectangleShape tailSection(sf::Vector2f(20,20));
+    tailSection.setPosition(snakeSections[0].getPosition());
     snakeSections.push_back(tailSection);
 }
 
