@@ -11,7 +11,7 @@ To-do: { [] = not done; [x] = done; }
     Snake constant movement [] { Snake should save last direction and continuing moving that way }
     Death screen []
     Border wall collision []
-    Food generation []
+    Food generation [x]
     Food collision []
     Snake growth []
     Snake collision []
@@ -230,12 +230,6 @@ int main() {
             }
         }
         window.clear();
-        // Spawns food after checking elapsed time since last spawn
-        elapsed = clock.getElapsedTime();
-        if(elapsed.asSeconds() >= foodDelay) {
-            foodGen(foodSections,window);
-            clock.restart();
-        }
         // Draws background
         window.draw(background);
         // Draws menu screen
@@ -245,9 +239,15 @@ int main() {
             window.draw(startText);
         }
         // Draws game screen
-        else if(gameState == 1) { 
-            drawSnake(snakeSections,window); 
+        else if(gameState == 1) {
+            // Spawns food after checking elapsed time since last spawn
+            elapsed = clock.getElapsedTime();
+            if(elapsed.asSeconds() >= foodDelay) {
+                foodGen(foodSections,window);
+                clock.restart();
+            } 
             drawFood(foodSections,window);
+            drawSnake(snakeSections,window); 
         }
         window.display();
     }
