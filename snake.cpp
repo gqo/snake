@@ -1,7 +1,9 @@
 #include <SFML/Graphics.hpp>
-#include <string>
 #include <iostream>
 #include <vector>
+// Includes for rand# gen
+#include <stdlib.h>
+#include <time.h>
 
 /*
 To-do: { [] = not done; [x] = done; }
@@ -88,6 +90,37 @@ void drawSnake(std::vector<sf::RectangleShape>& snakeSections, sf::RenderWindow&
     }
 }
 
+// Function for generation of random position within boundary
+sf::Vector2f randPos() {
+    srand (time(NULL));
+    sf::Vector2f randPosition(((rand() % 23 + 2) * 20),((rand() % 23 + 2) * 20));
+    return randPosition;
+}
+
+// Function for handling food generation
+void foodGen(std::vector<sf::RectangleShape>& foodSections, sf::RenderWindow& window) {
+    sf::RectangleShape foodBit(sf::Vector2f(-20,-20));
+    foodBit.setFillColor(sf::Color::Yellow);
+    foodBit.setPosition(randPos());
+    bool checkNewFood = 0;
+    // Checks for creation of a food section on top of another food section
+    while (!checkNewFood) {
+        for(int i = 0; i < foodSections.size(); i++) {
+            if(foodBit.getPosition() == foodSections[i].getPosition()) { checkNewFood = 0; }
+            if(i == foodSections.size() - 1) { checkNewFood = 1; }
+        }
+        if(checkNewFood == 0) { foodBit.setPosition(randPos()); }
+    }
+    foodSections.push_back(foodBit);
+}
+
+// Function for handling food bit draws
+void drawFood(std::vector<sf::RectangleShape>& foodSections, sf::RenderWindow& window) {
+    for(int i = 0; i < foodSections.size(); i++) {
+        window.draw(foodSections[i]);
+    }
+}
+
 int main() {
     // Initialize popup window, i.e. the game window
     sf::RenderWindow window(sf::VideoMode(520, 520), "Snake");
@@ -124,6 +157,16 @@ int main() {
     snakeSections.push_back(body);
     addTailSection(snakeSections);
     addTailSection(snakeSections);
+    // Initialize vector for tracking food sections
+    std::vector<sf::RectangleShape> foodSections;
+    /*
+    protoFood is required to instantiate the foodSections vector so when foodGen checks if
+    the created foodBit is at the same position as another food section (to prevent drawing
+    to food sections on the same point) there is something to check against. Otherwise foodGen
+    checks for bits that don't exist and crashes the game.
+    */
+    sf::RectangleShape protoFood(sf::Vector2f(-40,-40)); 
+    foodSections.push_back(protoFood);
     // Creates game window instance
     while (window.isOpen()) {
         // Tracks interactions with window
@@ -163,6 +206,10 @@ int main() {
                         case sf::Keyboard::Right:
                             moveSnake(3,snakeSections);
                             break;
+                        // Dev tool for testing food generation
+                        case sf::Keyboard::F:
+                            foodGen(foodSections,window);
+                            break;
                         // Default for unhandled keypress
                         default:
                             break;
@@ -183,7 +230,10 @@ int main() {
             window.draw(startText);
         }
         // Draws game screen
-        else if(gameState == 1) { drawSnake(snakeSections,window); }
+        else if(gameState == 1) { 
+            drawSnake(snakeSections,window); 
+            drawFood(foodSections,window);
+        }
         window.display();
     }
     return 0;
