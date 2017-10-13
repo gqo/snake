@@ -51,9 +51,14 @@ void moveSection(int direction, sf::RectangleShape& section) {
 }
 
 // (Hopefully) extensible function for reseting game on escape
-void gameReset(std::vector<sf::RectangleShape>& snakeSections) {
+void gameReset(std::vector<sf::RectangleShape>& snakeSections,
+    std::vector<sf::RectangleShape>& foodSections) {
     for(int i = 0; i < snakeSections.size(); i++) {
         snakeSections[i].setPosition(240,240);
+    }
+    int foodSize = foodSections.size() - 1;
+    for (int i = 0; i < foodSize; i++) {
+        foodSections.pop_back();
     }
 }
 
@@ -167,6 +172,10 @@ int main() {
     */
     sf::RectangleShape protoFood(sf::Vector2f(-40,-40)); 
     foodSections.push_back(protoFood);
+    // Intialize clock for food timekeeping
+    sf::Clock clock;
+    sf::Time elapsed = clock.getElapsedTime();
+    int foodDelay = 2; // Controls spawn rate of food
     // Creates game window instance
     while (window.isOpen()) {
         // Tracks interactions with window
@@ -185,7 +194,7 @@ int main() {
                         case sf::Keyboard::Escape:
                             if(gameState == 1) { 
                                 gameState = 0;
-                                gameReset(snakeSections); 
+                                gameReset(snakeSections, foodSections); 
                             }
                             else { window.close(); }
                             break;
@@ -207,9 +216,9 @@ int main() {
                             moveSnake(3,snakeSections);
                             break;
                         // Dev tool for testing food generation
-                        case sf::Keyboard::F:
+                        /* case sf::Keyboard::F:
                             foodGen(foodSections,window);
-                            break;
+                            break; */
                         // Default for unhandled keypress
                         default:
                             break;
@@ -221,6 +230,12 @@ int main() {
             }
         }
         window.clear();
+        // Spawns food after checking elapsed time since last spawn
+        elapsed = clock.getElapsedTime();
+        if(elapsed.asSeconds() >= foodDelay) {
+            foodGen(foodSections,window);
+            clock.restart();
+        }
         // Draws background
         window.draw(background);
         // Draws menu screen
