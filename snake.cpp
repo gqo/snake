@@ -1,10 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
+#include <vector>
 
 /*
 To-do: { [] = not done; [x] = done; }
-    Snake tail implementation []
+    Snake tail implementation [x]
+    Snake constant movement [] { Snake should save last direction and continuing moving that way }
     Death screen []
     Border wall collision []
     Food generation []
@@ -24,8 +26,8 @@ Ideas:
     Levels? { I.e. different maps with different walls }
 */
 
-// (Hopefully) extensible function for character movement
-void movement(int direction, sf::RectangleShape& section) {
+// (Hopefully) extensible function for character movement of one section
+void moveSection(int direction, sf::RectangleShape& section) {
     switch(direction) {
         // Up
         case 0:
@@ -49,6 +51,31 @@ void movement(int direction, sf::RectangleShape& section) {
 // (Hopefully) extensible function for reseting game on escape
 void gameReset(sf::RectangleShape& section) {
     section.setPosition(240,240);
+}
+
+// Function for adding a tail section to snake
+void addTailSection(std::vector<sf::RectangleShape>& snakeSections) {
+    sf::RectangleShape tailSection(sf::Vector2f(20,20));
+    snakeSections.push_back(tailSection);
+}
+
+// Function for handling all character movement
+void moveSnake(int direction, std::vector<sf::RectangleShape>& snakeSections) {
+    sf::Vector2f leadPos = snakeSections[0].getPosition();
+    sf::Vector2f trailPos;
+    moveSection(direction, snakeSections[0]);
+    for(int i = 1; i < snakeSections.size(); i++) {
+        trailPos = snakeSections[i].getPosition();
+        snakeSections[i].setPosition(leadPos);
+        leadPos = trailPos;
+    }
+}
+
+// Function for handling all character draws
+void drawSnake(std::vector<sf::RectangleShape>& snakeSections, sf::RenderWindow& window) {
+    for(int i = 0; i < snakeSections.size(); i++) {
+        window.draw(snakeSections[i]);
+    }
 }
 
 int main() {
@@ -82,6 +109,11 @@ int main() {
     // Initialize game screen objects
     sf::RectangleShape body(sf::Vector2f(20, 20)); // Character test body
     body.setPosition(240,240);
+    // Initialize vector for tracking snake sections
+    std::vector<sf::RectangleShape> snakeSections;
+    snakeSections.push_back(body);
+    addTailSection(snakeSections);
+    addTailSection(snakeSections);
     // Creates game window instance
     while (window.isOpen()) {
         // Tracks interactions with window
@@ -110,16 +142,16 @@ int main() {
                             break;
                         // Character movement handling
                         case sf::Keyboard::Up:
-                            movement(0,body);
+                            moveSnake(0,snakeSections);
                             break;
                         case sf::Keyboard::Down:
-                            movement(1,body);
+                            moveSnake(1,snakeSections);
                             break;
                         case sf::Keyboard::Left:
-                            movement(2,body);
+                            moveSnake(2,snakeSections);
                             break;
                         case sf::Keyboard::Right:
-                            movement(3,body);
+                            moveSnake(3,snakeSections);
                             break;
                         // Default for unhandled keypress
                         default:
@@ -141,7 +173,7 @@ int main() {
             window.draw(startText);
         }
         // Draws game screen
-        else if(gameState == 1) { window.draw(body); }
+        else if(gameState == 1) { drawSnake(snakeSections,window); }
         window.display();
     }
     return 0;
