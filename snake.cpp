@@ -49,12 +49,13 @@ void moveSection(int direction, sf::RectangleShape& section) {
 }
 
 // (Hopefully) extensible function for reseting game on escape
-void gameReset(sf::RectangleShape& section) {
-    section.setPosition(240,240);
+void gameReset(std::vector<sf::RectangleShape>& snakeSections) {
+    for(int i = 0; i < snakeSections.size(); i++) {
+        snakeSections[i].setPosition(240,240);
+    }
 }
 
 // Function for adding a tail section to snake
-// If you change the position the tail sections spawn at the movement breaks (!)
 void addTailSection(std::vector<sf::RectangleShape>& snakeSections) {
     sf::RectangleShape tailSection(sf::Vector2f(20,20));
     tailSection.setPosition(snakeSections[0].getPosition());
@@ -109,7 +110,7 @@ int main() {
     sf::Text subText("a game by Graeme & Reece",font,20); // Subtitle
     subText.setFillColor(sf::Color::Blue);
     subText.setPosition(147,200);
-    sf::Text startText("Press Space to Begin",font,55); // Start instruction { TBD }
+    sf::Text startText("Press Space to Begin",font,55); // Start instruction
     startText.setFillColor(sf::Color::White);
     startText.setStyle(sf::Text::Bold);
     startText.setPosition(32,300);
@@ -141,7 +142,7 @@ int main() {
                         case sf::Keyboard::Escape:
                             if(gameState == 1) { 
                                 gameState = 0;
-                                gameReset(body); 
+                                gameReset(snakeSections); 
                             }
                             else { window.close(); }
                             break;
