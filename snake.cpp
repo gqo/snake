@@ -77,10 +77,8 @@ int main() {
     startText.setFillColor(sf::Color::White);
     startText.setStyle(sf::Text::Bold);
     startText.setPosition(32,300);
-    // Initialize game on/off bool
-    bool inGame = 0; // 0 == off
-    // Initialize game pause bool
-    bool pause = 0; // 0 == not paused
+    // Initialize game state int
+    int gameState = 0; // 0 == menu, 1 == game, 2 == pause, 3 == death
     // Initialize game screen objects
     sf::RectangleShape body(sf::Vector2f(20, 20)); // Character test body
     body.setPosition(240,240);
@@ -100,15 +98,15 @@ int main() {
                         // At menu, close window; in game, return to menu
                         // Resets game to start
                         case sf::Keyboard::Escape:
-                            if(inGame == 1) { 
-                                inGame = 0;
+                            if(gameState == 1) { 
+                                gameState = 0;
                                 gameReset(body); 
                             }
                             else { window.close(); }
                             break;
                         // Starts game
                         case sf::Keyboard::Space:
-                            inGame = 1;
+                            gameState = 1;
                             break;
                         // Character movement handling
                         case sf::Keyboard::Up:
@@ -137,13 +135,13 @@ int main() {
         // Draws background
         window.draw(background);
         // Draws menu screen
-        if(inGame == 0) {
+        if(gameState == 0) {
             window.draw(titleText);
             window.draw(subText);
             window.draw(startText);
         }
         // Draws game screen
-        else { window.draw(body); }
+        else if(gameState == 1) { window.draw(body); }
         window.display();
     }
     return 0;
