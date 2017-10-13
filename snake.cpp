@@ -2,6 +2,28 @@
 #include <string>
 #include <iostream>
 
+/*
+To-do: { [] = not done; [x] = done; }
+    Snake tail implementation []
+    Death screen []
+    Border wall collision []
+    Food generation []
+    Food collision []
+    Snake growth []
+    Snake collision []
+    Pause implementation []
+
+Ideas:
+    Points?
+    High scores?
+    Snake sprites? { I.e. no more blocks }
+    Settings?
+        Difficulty?
+        Artistic styles? { I.e. block mode, sprite mode, visual settings in general }
+        Wall collision on/off?
+    Levels? { I.e. different maps with different walls }
+*/
+
 // (Hopefully) extensible function for character movement
 void movement(int direction, sf::RectangleShape& body) {
     switch(direction) {
@@ -57,6 +79,8 @@ int main() {
     startText.setPosition(32,300);
     // Initialize game on/off bool
     bool inGame = 0; // 0 == off
+    // Initialize game pause bool
+    bool pause = 0; // 0 == not paused
     // Initialize game screen objects
     sf::RectangleShape body(sf::Vector2f(20, 20)); // Character test body
     body.setPosition(240,240);
