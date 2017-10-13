@@ -25,30 +25,30 @@ Ideas:
 */
 
 // (Hopefully) extensible function for character movement
-void movement(int direction, sf::RectangleShape& body) {
+void movement(int direction, sf::RectangleShape& section) {
     switch(direction) {
         // Up
         case 0:
-            body.move(0,-20);
+            section.move(0,-20);
             break;
         // Down
         case 1:
-            body.move(0,20);
+            section.move(0,20);
             break;
         // Left
         case 2:
-            body.move(-20,0);
+            section.move(-20,0);
             break;
         // Right
         case 3:
-            body.move(20,0);
+            section.move(20,0);
             break;
     }
 }
 
 // (Hopefully) extensible function for reseting game on escape
-void gameReset(sf::RectangleShape& body) {
-    body.setPosition(240,240);
+void gameReset(sf::RectangleShape& section) {
+    section.setPosition(240,240);
 }
 
 int main() {
